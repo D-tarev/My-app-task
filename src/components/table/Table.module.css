@@ -1,0 +1,28 @@
+
+table {
+  font-family: "Montserrat", sans-serif;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: white;
+  margin-top: 20px;
+  width: 1090px;
+  border: 1px solid #C5C5C5;
+  border-radius: 2px;
+  border-spacing: 1px;
+  border-collapse: collapse;
+}
+th{
+  height: 38px;
+  font-family: "Montserrat", sans-serif;
+  font-size: 14px;
+    border: 1px solid #C5C5C5;
+
+    font-weight: 500;
+    text-align: left;
+    padding-left: 10px;
+    line-height: 18.2px;
+}
+thead{
+  font-family: "Montserrat", sans-serif;
+
+}

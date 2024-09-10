@@ -1,0 +1,32 @@
+.wrapper {
+  margin-top: 50px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 1090px;
+  display: grid;
+  justify-content: space-between;
+  position: relative;
+}
+h1 {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 600;
+  font-size: 24px;
+  width: 427px;
+}
+.buttonCreate{
+  position: absolute;
+    top: 10px;
+    right: 0px;
+    font-family: "Montserrat", sans-serif;
+    font-weight: 500;
+    height: 48px;
+    width: 278px;
+    background-color: #f7ee55;
+    font-size: 18px;
+    border-radius: 10px;
+    padding: 13px 24px 13px 24px;
+}
+.modalHead{
+  font-size: 30px;
+  text-align: center;
+}
