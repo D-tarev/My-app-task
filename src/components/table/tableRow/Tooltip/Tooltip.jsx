@@ -1,5 +1,10 @@
 import { useState } from "react";
 import style from "./Tooltip.module.css";
+import { PropTypes } from "prop-types";
+
+Tooltip.propTypes = {
+  description: PropTypes.string,
+};
 
 function Tooltip(props) {
   const [show, setShow] = useState(false);

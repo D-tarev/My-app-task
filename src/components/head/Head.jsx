@@ -1,16 +1,17 @@
-
-import { NavLink } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Table from "../table/Table";
 
 function Head() {
+  const navigate = useNavigate();
+  const handleCreateProduct = () => navigate("/productForm");
+
   return (
     <div className="wrapper">
       <h1>Список выпускаемой продукции</h1>
-      <NavLink to="/productForm">
-        <button className="buttonCreate">
-          Создать тип продукции
-        </button>
-      </NavLink>
+
+      <button className="buttonCreate" onClick={handleCreateProduct}>
+        Создать тип продукции
+      </button>
 
       <Table></Table>
     </div>

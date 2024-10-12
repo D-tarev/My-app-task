@@ -1,22 +1,27 @@
 import style from "./TableRow.module.css";
 import Tooltip from "./Tooltip/Tooltip";
-import { NavLink } from "react-router-dom";
+import { useNavigate, NavLink } from "react-router-dom";
 import Modal from "react-modal";
 import { useState } from "react";
+import { deleteData } from "../../../api/api";
+import { PropTypes } from "prop-types";
+
+TableRow.propTypes = {
+  id: PropTypes.number,
+  packsNumber: PropTypes.number,
+  createdAt: PropTypes.string,
+  description: PropTypes.string,
+  packageType: PropTypes.string,
+  isArchived: PropTypes.bool,
+};
 
 function TableRow(props) {
+  const navigate = useNavigate();
 
-
-  // Удаление продукта
-  const deleteData = async (url = "") => {
-    const response = await fetch(url, {
-      method: "DELETE",
+  function clickDelete() {
+    deleteData(props.id).then((res) => {
+      res ? navigate("/") : null;
     });
-    return response.json();
-  };
-
-  function click() {
-    deleteData(`http://localhost:8081/productTypes/${props.id}`, {});
   }
   //////////////////////////////////////////////////////////////////
 
@@ -34,29 +39,25 @@ function TableRow(props) {
       height: "200px",
     },
   };
-  const openModal = () => {
-    setModalIsOpen(true);
-  };
+  // const openModal = () => {
+  //   setModalIsOpen(true);
+  // };
 
-  const closeModal = () => {
-    setModalIsOpen(false);
-  };
+  // const closeModal = () => {
+  //   setModalIsOpen(false);
+  // };
   const modalContent = (
     <div>
       <h2 className="modalHead">Хотите удалить выбранный продукт ?</h2>
-      <NavLink to="/">
-        <button
-          className={style.buttonDel}
-          onClick={() => {
-            closeModal();
-            click();
-          }}
-        >
-          Удалить
-        </button>
-      </NavLink>
-
-      <button className={style.buttonCan} onClick={closeModal}>
+      <button
+        className={style.buttonDel}
+        onClick={() => {
+          () => setModalIsOpen(false), clickDelete();
+        }}
+      >
+        Удалить
+      </button>
+      <button className={style.buttonCan} onClick={() => setModalIsOpen(false)}>
         Отмена
       </button>
     </div>
@@ -69,8 +70,6 @@ function TableRow(props) {
   // Конвертация времени создания
   const dateTime = props.createdAt.split("T")[0];
   //////////////////////////////////////////////////////////////////
-
-
 
   return (
     <tr>
@@ -86,14 +85,14 @@ function TableRow(props) {
         <NavLink to={`/productForm/${props.id}`}>
           <img src="\img\iconPen.svg" width={74} height={23} />
         </NavLink>
-        <NavLink onClick={openModal}>
+        <NavLink onClick={() => setModalIsOpen(true)}>
           <img src="\img\iconTra.svg" width={74} height={23} />
         </NavLink>
         <Modal
           appElement={document.getElementById("root")}
           style={customStyles}
           isOpen={modalIsOpen}
-          onRequestClose={closeModal}
+          onRequestClose={() => setModalIsOpen(false)}
         >
           {modalContent}
         </Modal>

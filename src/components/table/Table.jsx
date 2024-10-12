@@ -2,25 +2,17 @@ import "./Table.module.css";
 import TableRow from "./tableRow/TableRow";
 import { useState } from "react";
 import { useEffect } from "react";
-
-
-
+import { getData } from "../../api/api";
 
 function Table() {
-
   const [products, setProducts] = useState([]);
-  //Получение данных
 
-  const getData = async () => {
-    const response = await fetch("http://localhost:8081/productTypes").then(
-      (response) => response.json()
-    );
-    setProducts(response)
-  };
   useEffect(() => {
-    getData() 
+    getData().then((res) => {
+      setProducts(res);
+    });
   }, []);
- 
+
   return (
     <>
       <table>
@@ -37,6 +29,7 @@ function Table() {
         <tbody>
           {products.map((data) => (
             <TableRow
+              key={data.id}
               id={data.id}
               packsNumber={data.packsNumber}
               packageType={data.packageType}
@@ -49,6 +42,7 @@ function Table() {
       </table>
     </>
   );
+  
 }
 
 export default Table;
