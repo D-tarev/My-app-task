@@ -1,63 +1,61 @@
+* {
+  padding: 0px;
+}
+
 .outWrapper {
   font-family: "Montserrat", sans-serif;
   font-weight: 500;
   width: 700px;
   margin-left: auto;
   margin-right: auto;
-  height: min-content;
 }
 
 .inputWrapper {
+  height: min-content;
   width: 900px;
   font-size: 18px;
 }
-.mar {
-  margin-right: 50px;
+
+form {
+  display: grid;
+  grid-template-rows: repeat(4, min-content);
+  grid-template-columns: repeat(2, min-content);
+
+  row-gap: 20px;
 }
+input,
 select {
+  margin-left: 20px;
   font-family: "Montserrat", sans-serif;
   font-weight: 500;
-  width: 506px;
-  height: 44px;
-  border: 1px solid #aaaaaa;
-  border-radius: 6px;
-  margin-left: 45px;
-}
-input {
   font-size: 16px;
-  font-family: "Montserrat", sans-serif;
   width: 500px;
-  height: 36px;
+  height: 40px;
   border: 1px solid #aaaaaa;
   border-radius: 6px;
 }
 .check {
-  width: 24px;
-  height: 24px;
+  margin-top: -9px;
+  width: 25px;
+  justify-self: start;
+  align-self: start;
 }
-form {
-  margin-top: 22px;
-}
+
 .buttonWrapper {
   width: 440px;
   margin-left: auto;
   margin-right: auto;
   margin-top: 50px;
 }
-span {
-  color: #da1515;
-}
+
 .error {
+  color: #da1515;
   font-size: 15px;
   position: absolute;
-  margin-left: 190px;
+  top: 105px;
+  left: 470px;
 }
-.description {
-  font-size: 16px;
-  font-family: "Montserrat", sans-serif;
-  font-weight: 500;
-  margin-left: 40px;
-}
+
 .cancel {
   margin-right: 20px;
   font-family: "Montserrat", sans-serif;
@@ -70,28 +68,13 @@ span {
   border-radius: 10px;
   padding: 13px 24px 13px 24px;
 }
-.save {
-  font-family: "Montserrat", sans-serif;
-  font-weight: 500;
-  height: 48px;
-  width: 125px;
-  background-color: #f7ee55;
-  color: rgb(0, 0, 0);
-  font-size: 18px;
-  border-radius: 10px;
-  padding: 13px 24px 13px 24px;
-}
-select {
-  font-family: "Montserrat", sans-serif;
-  font-weight: 500;
-  font-size: 18px;
-}
+
 .save {
   font-family: "Montserrat", sans-serif;
   font-weight: 500;
   height: 48px;
   width: 150px;
-  background-color: #f7ee55;
+  background-color: #fff532;
   color: rgb(0, 0, 0);
   font-size: 18px;
   border-radius: 10px;

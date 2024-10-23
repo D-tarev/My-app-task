@@ -1,54 +1,59 @@
 import { useParams, NavLink, useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import style from "./ProductForm.module.css";
-import Modal from "react-modal";
 import { deleteData, patchData, postData, getProductById } from "../../api/api";
 import { PropTypes } from "prop-types";
+import { useForm } from "react-hook-form";
+import ModalK from "./Modal/Modal";
 
 ProductForm.propTypes = {
   isCreate: PropTypes.bool,
 };
 
 function ProductForm(props) {
+  const onSubmit = () => {
+    props.isCreate ? patchPostData(postData) : patchPostData(patchData, prodId);
+  };
+  const  [bool, setBool]  = useState(false);
+
   const params = useParams();
   const prodId = params.id;
 
   const navigate = useNavigate();
 
-  const [packCount, setPackCount] = useState("");
-  const [inputTwo, setInputTwo] = useState("");
-  const [typePack, setTypePack] = useState("компрессия");
-  const [isArchived, setIsArchived] = useState(false);
+  const {
+    register,
+    getValues,
+    formState: { errors },
+    handleSubmit,
+  } = useForm({
+    defaultValues: async () => {
+      const res = props.isCreate ? {} : await getProductById(prodId);
 
-  useEffect(() => {
-    if (!props.isCreate) {
-      getProductById(prodId).then(
-        (res) => (
-          setPackCount(res.packsNumber),
-          setTypePack(res.packageType),
-          setIsArchived(res.isArchived),
-          setInputTwo(res.description)
-        )
-      );
-    }
-  }, []);
+      return {
+        packCount: res.packsNumber,
+        typePack: res.packageType,
+        isArchived: res.isArchived,
+        description: res.description,
+      };
+    },
+    mode: "onBlur",
+  });
 
-  const [isFormSubmitted, setIsFormSubmitted] = useState(false);
-
-  function clickPostData(event) {
-    if (packCount == "") {
-      setIsFormSubmitted(true);
-      event.preventDefault();
-    } else {
-      postData({
-        packsNumber: Number(packCount),
-        packageType: typePack,
-        isArchived: Boolean(isArchived),
-        description: inputTwo,
-      }).then((res) => {
-        res ? navigate("/") : null;
-      });
-    }
+  function patchPostData(method, id) {
+    let data = {
+      packsNumber: Number(getValues().packCount),
+      packageType: getValues().typePack,
+      isArchived: Boolean(getValues().isArchived),
+      description: getValues().description,
+    };
+    id
+      ? method(id, data).then((res) => {
+          res ? navigate("/") : null;
+        })
+      : method(data).then((res) => {
+          res ? navigate("/") : null;
+        });
   }
 
   function clickDelete() {
@@ -56,66 +61,10 @@ function ProductForm(props) {
       res ? navigate("/") : null;
     });
   }
-  // const onChangeCheck = ({ target: { checked } }) => {
-  //   setIsArchived(checked);
-  // };
 
-  // function onChange1(event) {
-  //   setPackCount(event.target.value);
-  // }
-  // function onChange2(event) {
-  //   setTypePack(event.target.value);
-  // }
-  const [modalIsOpen, setModalIsOpen] = useState(false);
-
-  //Стили для модалки
-  const customStyles = {
-    content: {
-      top: "35%",
-      left: "36.5%",
-      right: "auto",
-      bottom: "auto",
-      marginRight: "-50%",
-      width: "700px",
-      height: "200px",
-    },
+  const toggleModal = () => {
+    setBool((prevState => !prevState))  
   };
-
-  const modalContent = (
-    <div>
-      <h2 className="modalHead">Хотите удалить выбранный продукт ?</h2>
-
-      <button
-        className={style.buttonDel}
-        onClick={() => {
-          setModalIsOpen(false), clickDelete();
-        }}
-      >
-        Удалить
-      </button>
-      <button className={style.buttonCan} onClick={() => setModalIsOpen(false)}>
-        Отмена
-      </button>
-    </div>
-  );
-
-  /////////////////////////////////////////////////////////////
-
-  function clickSave(event) {
-    if (packCount == "") {
-      setIsFormSubmitted(true);
-      event.preventDefault();
-    } else {
-      patchData(prodId, {
-        packsNumber: Number(packCount),
-        packageType: typePack,
-        isArchived: Boolean(isArchived),
-        description: inputTwo,
-      }).then((res) => {
-        res ? navigate("/") : null;
-      });
-    }
-  }
 
   return (
     <>
@@ -128,89 +77,53 @@ function ProductForm(props) {
         <div className={style.inputWrapper}>
           <form>
             <label className={style.mar} htmlFor="quantity">
-              Кол-во пачек<span> *</span>
+              Кол-во пачек<span>*</span>
             </label>
-
             <input
-              id="packCountId"
-              value={packCount}
-              onChange={() => setPackCount(event.target.value)}
+              {...register("packCount", {
+                required: "Введите число",
+              })}
               type="number"
             />
-          </form>
-          {isFormSubmitted && packCount == "" && (
-            <span className={style.error}>Введите число!</span>
-          )}
-          <form>
+            {errors?.packCount && (
+              <div className={style.error}>
+                {errors?.packCount?.message || "fff"}
+              </div>
+            )}
             <label className={style.mar} htmlFor="type-choice">
-              Тип упаковки<span> *</span>
-              <select
-                id="typePackId"
-                value={typePack}
-                onChange={() => setTypePack(event.target.value)}
-              >
-                <option value="компрессия">компрессия</option>
-                <option value="некомпрессия">некомпрессия </option>
-              </select>
+              Тип упаковки<span>*</span>
             </label>
-          </form>
-
-          <form>
+            <select {...register("typePack")}>
+              <option value="компрессия">компрессия</option>
+              <option value="некомпрессия">некомпрессия </option>
+            </select>
             <label className={style.mar} htmlFor="chek">
               Архивировано
             </label>
             <input
-              checked={isArchived}
-              value={isArchived}
-              onChange={({ target: { checked } }) => {
-                setIsArchived(checked);
-              }}
               className={style.check}
+              {...register("isArchived")}
               id="chek"
               type="checkbox"
             />
-          </form>
-          <form>
             <label className={style.mar} htmlFor="description">
               Описание
             </label>
-            <input
-              className={style.description}
-              value={inputTwo}
-              onChange={(event) => setInputTwo(event.target.value)}
-            />
+            <input className={style.description} {...register("description")} />
           </form>
         </div>
-        <Modal
-          appElement={document.getElementById("root")}
-          style={customStyles}
-          isOpen={modalIsOpen}
-          onRequestClose={() => setModalIsOpen(false)}
-        >
-          {modalContent}
-        </Modal>
+
+
+        <ModalK active={bool} prodId={prodId}/>
+
         <div className={style.buttonWrapper}>
           <NavLink to="/Head">
             <button className={style.cancel}>Отмена</button>
           </NavLink>
-          {!props.isCreate && (
-            <button
-              onClick={() => setModalIsOpen(true)}
-              className={style.delete}
-            >
-              Удалить
-            </button>
-          )}
-          {!props.isCreate && (
-            <button onClick={clickSave} className={style.save}>
-              Сохранить
-            </button>
-          )}
-          {props.isCreate && (
-            <button className={style.save} onClick={clickPostData}>
-              Создать
-            </button>
-          )}
+          {!props.isCreate && <button className={style.delete} onClick={toggleModal} >Удалить</button>}
+          <button onClick={handleSubmit(onSubmit)} className={style.save}>
+            {props.isCreate ? "Создать" : "Сохранить"}
+          </button>
         </div>
       </div>
     </>

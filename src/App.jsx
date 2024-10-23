@@ -5,6 +5,7 @@ import Head from "./components/head/Head.jsx";
 import ProductForm from "./components/productForm/ProductForm.jsx";
 
 function App() {
+  
   return (
     <BrowserRouter>
       <Routes>

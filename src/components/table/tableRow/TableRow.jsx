@@ -6,6 +6,9 @@ import { useState } from "react";
 import { deleteData } from "../../../api/api";
 import { PropTypes } from "prop-types";
 
+
+
+
 TableRow.propTypes = {
   id: PropTypes.number,
   packsNumber: PropTypes.number,
@@ -73,7 +76,7 @@ function TableRow(props) {
 
   return (
     <tr>
-      <td className={style.id}>{props.id}</td>
+      <td className={style.id}>{props.number}</td>
       <td className={style.packsNumber}>{props.packsNumber}</td>
       <td className={style.packageType}>{props.packageType}</td>
       <td className={style.createdAt}>{dateTime}</td>

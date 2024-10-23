@@ -27,10 +27,11 @@ function Table() {
           </tr>
         </thead>
         <tbody>
-          {products.map((data) => (
+          {products.map((data, index) => (
             <TableRow
               key={data.id}
               id={data.id}
+              number={index+1}
               packsNumber={data.packsNumber}
               packageType={data.packageType}
               isArchived={data.isArchived}

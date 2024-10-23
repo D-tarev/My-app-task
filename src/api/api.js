@@ -22,6 +22,7 @@ const patchData = async (prodId, data = {}) => {
 
     body: JSON.stringify(data),
   });
+
   return response.json();
 };
 
@@ -35,9 +36,10 @@ const postData = async (data = {}) => {
 
     body: JSON.stringify(data),
   });
+  
   return response.json();
 };
-const getProductById = async (prodId) => {
+const getProductById = async (prodId = {}) => {
   const response = await fetch(
     `http://localhost:8081/productTypes/${prodId}`
   ).then((response) => response.json());
